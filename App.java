@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class App {  
     public static void main (String args[]) {
-        final int OPERATIONS = 10000000;
+        final int OPERATIONS = 30;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
 
         MaxHeap compras = new MaxHeap(OPERATIONS);
@@ -36,22 +36,31 @@ public class App {
  
                 heapElement = new Tuple(cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
                 
-                //System.out.println("Tuple: " + heapElement.getQuantidade() + heapElement.getPreco());
+                //System.out.println("Tuple: " + heapElement.getQuantidade() +  " "  + heapElement.getPreco());
                 if(element[0] == "C") {
                     compras.add(heapElement);
+                    //System.out.println(compras.toString());
                 }
                 if(element[0] == "V") {
                     vendas.add(heapElement);
+                    //System.out.println(vendas.toString());
                 } 
                 
-                //System.out.println("Tuple: " + heapElement.getQuantidade() + " " + heapElement.getPreco());
+                for (int i = 0; i < compras.length(); i++) {
+                    System.out.println("compras: " + compras.poll().toString());
+                }
+
+                for (int i = 0; i < vendas.length(); i++) {
+                    System.out.println("vendas: " + vendas.peek().toString());
+                }
                 
-                Tuple[] aux = new Tuple[OPERATIONS/4];
+                Tuple aux; 
                 int quantidadeAux = 0;
                 int carrier = 0;
                 //while(! (compras.isEmpty() || vendas.isEmpty())) {
-                System.out.println(compras.peek().toString() + " " + vendas.peek().toString());
+                // System.out.println(compras.getHeap().toString() + " " + vendas.getHeap().toString());
                 if(! (compras.length() > 5 && vendas.length() > 5)) {
+                    //System.out.println(" " + aux.toString());
                     if(compras.peek().comparePreco(vendas.peek()) >= 0) {
                         quantidadeAux = compras.peek().getQuantidade();
                         carrier = vendas.peek().getQuantidade();
@@ -59,22 +68,21 @@ public class App {
                             lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
                             vendas.peek().setQuantidade(carrier - quantidadeAux);
                             compras.peek().setQuantidade(quantidadeAux - carrier);
-                            aux[cont] = compras.poll();
+                            aux = compras.poll();
                             negocio++;
-                            break;
                         } else if (quantidadeAux == carrier) {
                             lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
-                            aux[cont] = vendas.poll();
-                            aux[cont + 1] = compras.poll();
+                            aux= vendas.poll(); 
+                            aux = compras.poll();
                             negocio += 2;
-                            break;
-                        }else {
+                        }
+                        /* else {
                             vendas.peek().setQuantidade(quantidadeAux - carrier);
                             compras.peek().setQuantidade(carrier - quantidadeAux);
                             vendas.poll();
                             negocio ++;
-                        }
-                    }  
+                        } */
+                    }
                 } 
                 cont++;   
                 //System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));

@@ -46,10 +46,10 @@ public class Tuple implements Comparable<Tuple> {
     }
 
     public int compareQuantidade(Tuple t) {
-        return compareQuantidade.compare(this, t);
+        return this.getQuantidade().compareTo(t.getQuantidade());
     }
 
     public int comparePreco(Tuple t) {
-        return comparePreco.compare(this, t);
+        return this.getPreco().compareTo(t.getPreco());
     }
 }
