@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Launch Current File",
             "request": "launch",
-            "mainClass": "$App.java"
+            "mainClass": "App.java"
         },
         {
             "type": "java",

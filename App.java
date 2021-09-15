@@ -1,10 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class App {  
     public static void main (String args[]) {
-        final int OPERATIONS = 3000;
+        final int OPERATIONS = 10000000;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
 
         MaxHeap compras = new MaxHeap(OPERATIONS);
@@ -42,39 +43,44 @@ public class App {
                 if(element[0] == "V") {
                     vendas.add(heapElement);
                 } 
-                                
-                //System.out.println("Tuple: " + heapElement.getQuantidade() + heapElement.getPreco());
-                Tuple aux;
+                
+                //System.out.println("Tuple: " + heapElement.getQuantidade() + " " + heapElement.getPreco());
+                
+                Tuple[] aux = new Tuple[OPERATIONS/4];
                 int quantidadeAux = 0;
                 int carrier = 0;
-                if(! (compras.isEmpty() || vendas.isEmpty())) {
-                    aux = compras.peek();
-                    if(aux.comparePreco(vendas.peek()) >= 0) {
+                //while(! (compras.isEmpty() || vendas.isEmpty())) {
+                System.out.println(compras.peek().toString() + " " + vendas.peek().toString());
+                if(! (compras.length() > 5 && vendas.length() > 5)) {
+                    if(compras.peek().comparePreco(vendas.peek()) >= 0) {
                         quantidadeAux = compras.peek().getQuantidade();
                         carrier = vendas.peek().getQuantidade();
                         if(quantidadeAux < carrier) {
                             lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
                             vendas.peek().setQuantidade(carrier - quantidadeAux);
                             compras.peek().setQuantidade(quantidadeAux - carrier);
-                            compras.poll();
+                            aux[cont] = compras.poll();
                             negocio++;
+                            break;
                         } else if (quantidadeAux == carrier) {
-                            vendas.poll();
-                            compras.poll();
-                            negocio += 2;
-                        }else{
                             lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
+                            aux[cont] = vendas.poll();
+                            aux[cont + 1] = compras.poll();
+                            negocio += 2;
+                            break;
+                        }else {
                             vendas.peek().setQuantidade(quantidadeAux - carrier);
                             compras.peek().setQuantidade(carrier - quantidadeAux);
                             vendas.poll();
                             negocio ++;
                         }
-                    }     
-                }              
-                cont++;
+                    }  
+                } 
+                cont++;   
+                //System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));
             }
             readerScan.close();
-            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + compras.length() + "\nVendas restantes: " + vendas.length());
+            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));
         }catch (FileNotFoundException e) {
             System.out.println(e);
         }
