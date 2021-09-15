@@ -1,30 +1,43 @@
 
-public class Tuple implements Comparable<Tuple>{ 
-    private Integer id;
-    private Integer value1; 
-    private Integer value2; 
+public class Tuple implements Comparable<Tuple> {
 
-    public Tuple(Integer id, Integer value1, Integer value2) { 
+    private Integer id;
+    private Integer quantidade; 
+    private Integer preco;
+    TuplePrecoComparator comparePreco = new TuplePrecoComparator();
+    TupleQuantidadeComparator compareQuantidade= new TupleQuantidadeComparator();
+
+    public Tuple(Integer id, Integer quantidade, Integer preco) { 
+        super();
         this.id = id;
-        this.value1 = value1; 
-        this.value2 = value2; 
+        this.quantidade = quantidade; 
+        this.preco = preco; 
     }
 
     public Integer getId(){
         return id;
     }
 
-    public Integer getValue1(){
-        return value1;
+    public Integer getQuantidade(){
+        return quantidade;
     }
 
-    public Integer getValue2(){
-        return value2;
+    public Integer getPreco(){
+        return preco;
+    }
+
+    public void setQuantidade(Integer q){
+        this.preco = q;
+
+    }
+
+    public void setPreco(Integer p){
+        this.preco = p;
     }
 
     @Override
     public String toString() {
-        return "(" + value1 + "," + value2 + ")";
+        return "(" + quantidade + "," + preco + ")";
     }
 
     @Override
@@ -33,10 +46,10 @@ public class Tuple implements Comparable<Tuple>{
     }
 
     public int compareQuantidade(Tuple t) {
-        return this.getValue1().compareTo(t.getValue1());
+        return compareQuantidade.compare(this, t);
     }
 
     public int comparePreco(Tuple t) {
-        return this.getValue2().compareTo(t.getValue2());
+        return comparePreco.compare(this, t);
     }
 }
