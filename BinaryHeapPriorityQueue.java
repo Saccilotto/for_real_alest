@@ -7,11 +7,11 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     private Comparator<K> comparator;
 
     private int right(int i) {
-        return 2 * i + 1;
+        return 2 * i + 2;
     }
 
     private int left(int i) {
-        return 2 * i;
+        return 2 * i + 1;
     }
 
     private int parent(int i) {
