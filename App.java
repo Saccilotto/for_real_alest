@@ -45,15 +45,14 @@ public class App {
                     if(comprasPreco.peek() == null|| vendasPreco.peek() == null){
                         break;
                     }
-                    
-                    if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
-                        if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == 1) {
+                    if((comprasPreco.peek().getPreco() - vendasPreco.peek().getPreco()) < 0) {
+                        if(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade() > 0 )  {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
                             comprasPreco.peek().setQuantidade(vendasPreco.peek().getQuantidade() - comprasPreco.peek().getQuantidade());
                             comprasPreco.pool();
                             negocio++;
-                        } else if (vendasPreco.peek().compareQuantidade(comprasPreco.peek()) == 0) {
+                        } else if ((vendasPreco.peek().getPreco() - comprasPreco.peek().getPreco() < 0) && (comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade() == 0)) {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.pool(); 
                             comprasPreco.pool();

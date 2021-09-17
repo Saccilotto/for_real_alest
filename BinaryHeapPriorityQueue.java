@@ -97,9 +97,6 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     @Override
     public K peek() {
         int tamanho = eleKs.size();
-        if (eleKs.size() > 0) {
-            return eleKs.get(0);
-        }
         return tamanho == 0 ? null : eleKs.get(0);
     }
 
