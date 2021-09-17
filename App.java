@@ -9,8 +9,7 @@ public class App {
 
         BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator() ,OPERATIONS);
         BinaryHeapPriorityQueue<Tuple> vendasQuantidade = new BinaryHeapPriorityQueue<Tuple>(new TupleQuantidadeComparator() ,OPERATIONS);
-
-        MinHeap vendas = new MinHeap(OPERATIONS);
+        vendasQuantidade.reverse();
         
         int lucroTotal = 0;
         int negocio = 0;
@@ -54,14 +53,14 @@ public class App {
                         quantidadeAux = vendasQuantidade.peek().getQuantidade();
                         carrier = vendasQuantidade.peek().getQuantidade();
                         if(quantidadeAux < carrier) {
-                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendas.peek().getPreco();
-                            vendas.peek().setQuantidade(carrier - quantidadeAux);
+                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendasQuantidade.peek().getPreco();
+                            vendasQuantidade.peek().setQuantidade(carrier - quantidadeAux);
                             comprasPreco.peek().setQuantidade(quantidadeAux - carrier);
                             comprasPreco.pool();
                             negocio++;
                         } else if (quantidadeAux == carrier) {
-                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendas.peek().getPreco();
-                            vendas.poll(); 
+                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendasQuantidade.peek().getPreco();
+                            vendasQuantidade.pool(); 
                             comprasPreco.pool();
                             negocio += 2;
                         }

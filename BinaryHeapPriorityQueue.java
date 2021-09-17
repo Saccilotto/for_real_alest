@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements PriorityQueue<K> {
     private ArrayList<K> eleKs;
+    private Comparator<K> comparator;
 
     private int right(int i) {
         return 2 * i + 2;
@@ -67,13 +68,13 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     public BinaryHeapPriorityQueue(Comparator<K> comparator) {
         super();
         eleKs = new ArrayList<K>(30);
-        Collections.sort(eleKs, comparator);
+        this.comparator = comparator;
     }
 
     public BinaryHeapPriorityQueue(Comparator<K> comparator, int capacity) {
         super();
         eleKs = new ArrayList<K>(capacity);
-        Collections.sort(eleKs, comparator);
+        this.comparator = comparator;
     }
 
     public void add (K valueK) {
@@ -130,4 +131,17 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     public int length() {
         return eleKs.size();
     }
+
+    public Comparator<K> getComparator() {
+        return comparator;
+    }
+
+    public ArrayList<K> getArray() {
+        return getArray();
+    }
+
+    public void reverse() {
+       Collections.reverseOrder(getComparator());
+    }
+
 }
