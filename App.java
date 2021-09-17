@@ -45,7 +45,7 @@ public class App {
 
                 while(!(comprasPreco.length() > 0 || vendasPreco.length() > 0)) {// && !(comprasPreco.peek() == null && vendasPreco.peek() == null)) {
                     if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
-                        if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == -1) {
+                        if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == 1) {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
                             comprasPreco.peek().setQuantidade(vendasPreco.peek().getQuantidade() - comprasPreco.peek().getQuantidade());

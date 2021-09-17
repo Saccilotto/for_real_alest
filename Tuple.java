@@ -5,16 +5,15 @@ public class Tuple implements Comparable<Tuple> {
     private Integer quantidade; 
     private Integer preco;
     TuplePrecoComparator comparePreco = new TuplePrecoComparator();
-    TupleQuantidadeComparator compareQuantidade= new TupleQuantidadeComparator(); 
+    TupleQuantidadeComparator compareQuantidade = new TupleQuantidadeComparator(); 
 
     public Tuple(char label, Integer id, Integer quantidade, Integer preco) { 
         super();
         this.label = label;
         this.id = id;
         this.quantidade = quantidade; 
-        this.preco = preco; /*  */
+        this.preco = preco; 
     }
-
 
     public char getLabel(){
         return label;
@@ -43,7 +42,7 @@ public class Tuple implements Comparable<Tuple> {
 
     @Override
     public String toString() {
-        return "(" + quantidade + "," + preco + ")";
+        return "(" + id +"," + label + "," + quantidade + "," + preco +  ")";
     }
 
     @Override
