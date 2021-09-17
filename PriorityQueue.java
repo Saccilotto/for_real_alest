@@ -6,6 +6,6 @@ public interface PriorityQueue<K> {
     K peek(); 
     int size();
     //boolean contains(K element);
-    K pool();
+    K poll();
     String toString();
 }

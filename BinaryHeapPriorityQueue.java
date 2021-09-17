@@ -106,7 +106,7 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     }
 
     @Override
-    public K pool() {
+    public K poll() {
         K raiz = null;
         if (eleKs.size() == 0) {
             throw new IllegalStateException("MinHeap is empty.");

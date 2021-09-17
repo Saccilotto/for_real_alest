@@ -1,5 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Scanner;
 
 public class App {  
@@ -7,13 +12,13 @@ public class App {
         final int OPERATIONS = 30;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
         
-        BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
-        BinaryHeapPriorityQueue<Tuple> vendasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
-        vendasPreco.reverse();
-        int lucroTotal = 0;
-        int negocio = 0;
-        //ChronoLocalDateTime date0 = LocalDateTime.from(ZonedDateTime.now());
+        BinaryHeapPriorityQueue<Tuple> compras = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
+        BinaryHeapPriorityQueue<Tuple> vendas = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
+        compras.reverse();
+        ChronoLocalDateTime<LocalDate> date0 = LocalDateTime.from(ZonedDateTime.now());
         try {
+            int lucroTotal = 0;
+            int negocio = 0;
             File instances = new File(path);    
             Scanner readerScan = new Scanner(instances);
             String[] element = new String[3];
@@ -32,43 +37,54 @@ public class App {
                 }
                 heapElement = new Tuple(cont, element[0].charAt(0) , Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
                 
-                System.out.println("Tuple: " + heapElement.toString());
+                //System.out.println("Tuple: " + heapElement.toString());
                 if(heapElement.getLabel() == 'C') {
-                    comprasPreco.add(heapElement);
+                    compras.add(heapElement);
                 }
                 
                 if(heapElement.getLabel() == 'V') {
-                    vendasPreco.add(heapElement);
+                    vendas.add(heapElement);
                 } 
-                
-                while((comprasPreco.length() > 0 || vendasPreco.length() > 0))  {
-                    if(comprasPreco.peek() == null || vendasPreco.peek() == null){
+
+                while((compras.length() > 0 && vendas.length() > 0))  {
+                    if(vendas.peek().getPreco() >= compras.peek().getPreco()) {
                         break;
                     }
-                    int diffPreco = comprasPreco.peek().getPreco() - vendasPreco.peek().getPreco();
-                    int diffQuantidade = comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade(); 
-                    if(diffPreco < 0) {
-                        if(diffPreco > 0 && diffQuantidade > 0)  {
-                            lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
-                            vendasPreco.peek().setQuantidade(diffQuantidade);
-                            comprasPreco.peek().setQuantidade(diffPreco);
-                            comprasPreco.pool();
-                            negocio++;
-                        } else if(diffPreco > 0 && diffQuantidade == 0) {
-                            lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
-                            vendasPreco.pool(); 
-                            comprasPreco.pool();
-                            negocio += 2;
+                    //int diffPreco = vendas.peek().getPreco() - compras.peek().getPreco();
+                    int diffQuantidade = compras.peek().getQuantidade() - vendas.peek().getQuantidade(); 
+                    if(diffQuantidade >= 0)  {
+                        if(diffQuantidade == 0) {
+                            lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
+                            negocio += vendas.peek().getQuantidade()  + compras.peek().getQuantidade(); 
+                            vendas.poll(); 
+                            compras.poll();
+                        }else {
+                            lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
+                            //vendas.peek().setQuantidade(0);
+                            compras.peek().setQuantidade(diffQuantidade);
+                            //if(vendas.peek().getQuantidade() <= 0) {
+                            negocio += vendas.peek().getQuantidade();
+                            vendas.poll();
                         }
+                    } else {
+                        lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
+                        compras.peek().setQuantidade(Math.abs(diffQuantidade));
+                        negocio += vendas.peek().getQuantidade();
+                        vendas.poll();
                     }
                 } 
                 cont++;   
             }
             readerScan.close();
+            ChronoLocalDateTime<LocalDate> date1 = LocalDateTime.from(ZonedDateTime.now());
+            Duration diff = Duration.between(date1, date0);
+            long time  = diff.toSeconds();
+            int restantes = compras.length() + vendas.length();            
             System.out.println();
-            System.out.println(comprasPreco.toString() + "\n");
-            System.out.println(vendasPreco.toString());
-            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + comprasPreco.length() + "\nVendas restantes: " + vendasPreco.length());
+            System.out.println(compras.toString() + "\n");
+            System.out.println(vendas.toString());
+            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + compras.length() + "\nvendas restantes: " + vendas.length() + "\nTotal de transacoes" + restantes);
+            System.out.println("tempo de execução: " + time);
         }catch (FileNotFoundException e) {
             System.out.println(e);
         }
