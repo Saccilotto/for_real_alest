@@ -1,7 +1,7 @@
 import java.util.Comparator;
 
-public class TupleQuantidadeComparator implements Comparator<Tuple> {
-    public int compare(Tuple s1, Tuple s2) {
+public class TransacationQuantidadeComparator implements Comparator<Transaction> {
+    public int compare(Transaction s1, Transaction s2) {
         if (s1.getQuantidade() < s2.getQuantidade()) {
             return 1;
         }else if (s1.getQuantidade() == s2.getQuantidade()) {

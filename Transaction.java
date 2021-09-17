@@ -1,13 +1,11 @@
 
-public class Tuple implements Comparable<Tuple> {
+public class Transaction implements Comparable<Transaction> {
     private Integer id;
     private char label;
     private Integer quantidade; 
     private Integer preco;
-    /* TuplePrecoComparator comparePreco = new TuplePrecoComparator();
-    TupleQuantidadeComparator compareQuantidade = new TupleQuantidadeComparator();  */
 
-    public Tuple(Integer id, char label, Integer quantidade, Integer preco) { 
+    public Transaction(Integer id, char label, Integer quantidade, Integer preco) { 
         super();
         this.id = id;
         this.label = label;
@@ -46,15 +44,7 @@ public class Tuple implements Comparable<Tuple> {
     }
 
     @Override
-    public int compareTo(Tuple t) {
+    public int compareTo(Transaction t) {
         return this.getId().compareTo(t.getId());
     }
-
-/*     public int compareQuantidade(Tuple t) {
-        return compareQuantidade.compare(this, t);
-    }
-
-    public int comparePreco(Tuple t) {
-        return comparePreco.compare(this, t);
-    } */
 }

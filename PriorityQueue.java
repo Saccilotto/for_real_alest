@@ -5,7 +5,6 @@ public interface PriorityQueue<K> {
     boolean isEmpty();
     K peek(); 
     int size();
-    //boolean contains(K element);
     K poll();
     String toString();
 }
