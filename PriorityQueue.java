@@ -3,7 +3,7 @@ public interface PriorityQueue<K> {
     void add(K value);
     void clear();
     boolean isEmpty();
-    K peek(); // return min element
+    K peek(); 
     int size();
     //boolean contains(K element);
     K pool();

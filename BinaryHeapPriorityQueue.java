@@ -69,12 +69,14 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
         super();
         eleKs = new ArrayList<K>(30);
         this.comparator = comparator;
+        eleKs.sort(comparator);
     }
 
     public BinaryHeapPriorityQueue(Comparator<K> comparator, int capacity) {
         super();
         eleKs = new ArrayList<K>(capacity);
         this.comparator = comparator;
+        eleKs.sort(comparator);
     }
 
     public void add (K valueK) {
@@ -141,7 +143,7 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
     }
 
     public void reverse() {
-       Collections.reverseOrder(getComparator());
+       this.comparator = Collections.reverseOrder(getComparator());
     }
 
 }

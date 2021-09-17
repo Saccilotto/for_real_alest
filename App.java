@@ -7,10 +7,9 @@ public class App {
         final int OPERATIONS = 30;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
 
-        BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator() ,OPERATIONS);
-        BinaryHeapPriorityQueue<Tuple> vendasQuantidade = new BinaryHeapPriorityQueue<Tuple>(new TupleQuantidadeComparator() ,OPERATIONS);
-        vendasQuantidade.reverse();
-        
+        BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
+        BinaryHeapPriorityQueue<Tuple> vendasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
+        vendasPreco.reverse();
         int lucroTotal = 0;
         int negocio = 0;
         //ChronoLocalDateTime date0 = LocalDateTime.from(ZonedDateTime.now());
@@ -33,44 +32,38 @@ public class App {
                     element = data.split(" ");
                 }
                 //System.out.println("Read: " + element[0] + element[1] + element[2]);
- 
-                heapElement = new Tuple(cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
+                heapElement = new Tuple(element[0].charAt(0) ,cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
                 
-                //System.out.println("Tuple: " + heapElement.getQuantidade() +  " "  + heapElement.getPreco());
-                if(element[0] == "C") {
+                System.out.println("Tuple: " + heapElement.toString());
+                if(heapElement.getLabel() == 'C') {
                     comprasPreco.add(heapElement);
-                    //System.out.println(compras.toString());
                 }
-                if(element[0] == "V") {
-                    vendasQuantidade.add(heapElement);
-                    //System.out.println(vendas.toString());
+                
+                if(heapElement.getLabel() == 'V') {
+                    vendasPreco.add(heapElement);
                 } 
 
-                int quantidadeAux = 0;
-                int carrier = 0;
-                while(! (comprasPreco.length() > 0 || vendasQuantidade.length() > 0)  && !(comprasPreco.peek() == null && vendasQuantidade.peek() == null)) {
-                    if(comprasPreco.peek().comparePreco(vendasQuantidade.peek()) >= 0) {
-                        quantidadeAux = vendasQuantidade.peek().getQuantidade();
-                        carrier = vendasQuantidade.peek().getQuantidade();
-                        if(quantidadeAux < carrier) {
-                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendasQuantidade.peek().getPreco();
-                            vendasQuantidade.peek().setQuantidade(carrier - quantidadeAux);
-                            comprasPreco.peek().setQuantidade(quantidadeAux - carrier);
+                while(!(comprasPreco.length() > 0 || vendasPreco.length() > 0)) {// && !(comprasPreco.peek() == null && vendasPreco.peek() == null)) {
+                    if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
+                        if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == -1) {
+                            lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
+                            vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
+                            comprasPreco.peek().setQuantidade(vendasPreco.peek().getQuantidade() - comprasPreco.peek().getQuantidade());
                             comprasPreco.pool();
                             negocio++;
-                        } else if (quantidadeAux == carrier) {
-                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendasQuantidade.peek().getPreco();
-                            vendasQuantidade.pool(); 
+                        } else if (vendasPreco.peek().compareQuantidade(comprasPreco.peek()) == 0) {
+                            lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
+                            vendasPreco.pool(); 
                             comprasPreco.pool();
                             negocio += 2;
                         }
                     }
                 } 
                 cont++;   
-                //System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));
             }
             readerScan.close();
-            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + comprasPreco.toString()+ "\nVendas restantes: " + vendasQuantidade.toString());
+
+            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + comprasPreco.length() + "\nVendas restantes: " + vendasPreco.length());
         }catch (FileNotFoundException e) {
             System.out.println(e);
         }
