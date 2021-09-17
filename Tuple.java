@@ -1,16 +1,16 @@
 
 public class Tuple implements Comparable<Tuple> {
-    private char label;
     private Integer id;
+    private char label;
     private Integer quantidade; 
     private Integer preco;
     TuplePrecoComparator comparePreco = new TuplePrecoComparator();
     TupleQuantidadeComparator compareQuantidade = new TupleQuantidadeComparator(); 
 
-    public Tuple(char label, Integer id, Integer quantidade, Integer preco) { 
+    public Tuple(Integer id, char label, Integer quantidade, Integer preco) { 
         super();
-        this.label = label;
         this.id = id;
+        this.label = label;
         this.quantidade = quantidade; 
         this.preco = preco; 
     }

@@ -16,7 +16,7 @@ public class App {
         try {
             File instances = new File(path);    
             Scanner readerScan = new Scanner(instances);
-            String[] element = {null,null,null};
+            String[] element = new String[3];
             Tuple heapElement;
             int cont = 0;
             while(readerScan.hasNextLine()) {
@@ -24,14 +24,13 @@ public class App {
                 if(data.equals("q")) {
                     break;
                 }
-
                 element = data.split(" ");
 
                 if(element.length == 1) {
                     data = readerScan.nextLine();
                     element = data.split(" ");
                 }
-                heapElement = new Tuple(element[0].charAt(0), cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
+                heapElement = new Tuple(cont, element[0].charAt(0) , Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
                 
                 System.out.println("Tuple: " + heapElement.toString());
                 if(heapElement.getLabel() == 'C') {
@@ -42,10 +41,12 @@ public class App {
                     vendasPreco.add(heapElement);
                 } 
                 
-                while((comprasPreco.length() > 0 || vendasPreco.length() > 0) && !(comprasPreco.peek() == null && vendasPreco.peek() == null)) {
-                    //if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
-                    int comparepreco = comprasPreco.peek().comparePreco(vendasPreco.peek());
-                    if(comparepreco == 1) {
+                while((comprasPreco.length() > 0 || vendasPreco.length() > 0))  {
+                    if(comprasPreco.peek() == null|| vendasPreco.peek() == null){
+                        break;
+                    }
+                    
+                    if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
                         if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == 1) {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
