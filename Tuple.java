@@ -4,8 +4,8 @@ public class Tuple implements Comparable<Tuple> {
     private Integer id;
     private Integer quantidade; 
     private Integer preco;
-    TuplePrecoComparator comparePreco = new TuplePrecoComparator();
-    TupleQuantidadeComparator compareQuantidade= new TupleQuantidadeComparator();
+    /* TuplePrecoComparator comparePreco = new TuplePrecoComparator();
+    Tuple QuantidadeComparator compareQuantidade= new TupleQuantidadeComparator();*/
 
     public Tuple(Integer id, Integer quantidade, Integer preco) { 
         super();

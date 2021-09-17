@@ -15,7 +15,7 @@ public class MaxHeap {
     private int right(int i) {
         return 2 * i + 2;
     }
-
+    
     private int left(int i) {
         return 2 * i + 1;
     }

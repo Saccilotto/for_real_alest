@@ -10,7 +10,7 @@ public class App {
 
         MaxHeap compras = new MaxHeap(OPERATIONS);
         MinHeap vendas = new MinHeap(OPERATIONS);
-
+        
         int lucroTotal = 0;
         int negocio = 0;
         //ChronoLocalDateTime date0 = LocalDateTime.from(ZonedDateTime.now());
@@ -57,10 +57,7 @@ public class App {
                 Tuple aux; 
                 int quantidadeAux = 0;
                 int carrier = 0;
-                //while(! (compras.isEmpty() || vendas.isEmpty())) {
-                // System.out.println(compras.getHeap().toString() + " " + vendas.getHeap().toString());
-                if(! (compras.length() > 5 && vendas.length() > 5)) {
-                    //System.out.println(" " + aux.toString());
+                while(! (compras.length() > 0 || vendas.length() > 0)) {
                     if(compras.peek().comparePreco(vendas.peek()) >= 0) {
                         quantidadeAux = compras.peek().getQuantidade();
                         carrier = vendas.peek().getQuantidade();
@@ -72,7 +69,7 @@ public class App {
                             negocio++;
                         } else if (quantidadeAux == carrier) {
                             lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
-                            aux= vendas.poll(); 
+                            aux = vendas.poll(); 
                             aux = compras.poll();
                             negocio += 2;
                         }
