@@ -45,14 +45,16 @@ public class App {
                     if(comprasPreco.peek() == null|| vendasPreco.peek() == null){
                         break;
                     }
-                    if((comprasPreco.peek().getPreco() - vendasPreco.peek().getPreco()) < 0) {
-                        if(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade() > 0 )  {
+                    int diffPreco = comprasPreco.peek().getPreco() - vendasPreco.peek().getPreco();
+                    int diffQuantidade = comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade(); 
+                    if(diffPreco < 0) {
+                        if(diffPreco > 0 && diffQuantidade > 0)  {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
-                            vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
-                            comprasPreco.peek().setQuantidade(vendasPreco.peek().getQuantidade() - comprasPreco.peek().getQuantidade());
+                            vendasPreco.peek().setQuantidade(diffQuantidade);
+                            comprasPreco.peek().setQuantidade(diffPreco);
                             comprasPreco.pool();
                             negocio++;
-                        } else if ((vendasPreco.peek().getPreco() - comprasPreco.peek().getPreco() < 0) && (comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade() == 0)) {
+                        } else if (diffPreco > 0 && diffQuantidade == 0) {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.pool(); 
                             comprasPreco.pool();
