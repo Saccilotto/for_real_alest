@@ -95,13 +95,11 @@ public class MinHeap {
      * @return o menor valor do heap.
      */
     public Tuple peek() {       // equivalente ao método min()
+        int tamanho = heaplist.size();
         if (heaplist.size() > 0) {
             return heaplist.get(0);
         }
-        else {
-            return null;
-        }
-        // return tamanho == 0 ? null : heap[0];
+        return tamanho == 0 ? null : heaplist.get(0);
     }
 
     /**

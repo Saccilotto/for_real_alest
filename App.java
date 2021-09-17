@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class App {  
@@ -8,7 +7,9 @@ public class App {
         final int OPERATIONS = 30;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
 
-        MaxHeap compras = new MaxHeap(OPERATIONS);
+        BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator() ,OPERATIONS);
+        BinaryHeapPriorityQueue<Tuple> vendasQuantidade = new BinaryHeapPriorityQueue<Tuple>(new TupleQuantidadeComparator() ,OPERATIONS);
+
         MinHeap vendas = new MinHeap(OPERATIONS);
         
         int lucroTotal = 0;
@@ -38,54 +39,39 @@ public class App {
                 
                 //System.out.println("Tuple: " + heapElement.getQuantidade() +  " "  + heapElement.getPreco());
                 if(element[0] == "C") {
-                    compras.add(heapElement);
+                    comprasPreco.add(heapElement);
                     //System.out.println(compras.toString());
                 }
                 if(element[0] == "V") {
-                    vendas.add(heapElement);
+                    vendasQuantidade.add(heapElement);
                     //System.out.println(vendas.toString());
                 } 
-                
-                for (int i = 0; i < compras.length(); i++) {
-                    System.out.println("compras: " + compras.poll().toString());
-                }
 
-                for (int i = 0; i < vendas.length(); i++) {
-                    System.out.println("vendas: " + vendas.peek().toString());
-                }
-                
-                Tuple aux; 
                 int quantidadeAux = 0;
                 int carrier = 0;
-                while(! (compras.length() > 0 || vendas.length() > 0)) {
-                    if(compras.peek().comparePreco(vendas.peek()) >= 0) {
-                        quantidadeAux = compras.peek().getQuantidade();
-                        carrier = vendas.peek().getQuantidade();
+                while(! (comprasPreco.length() > 0 || vendasQuantidade.length() > 0)  && !(comprasPreco.peek() == null && vendasQuantidade.peek() == null)) {
+                    if(comprasPreco.peek().comparePreco(vendasQuantidade.peek()) >= 0) {
+                        quantidadeAux = vendasQuantidade.peek().getQuantidade();
+                        carrier = vendasQuantidade.peek().getQuantidade();
                         if(quantidadeAux < carrier) {
-                            lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
+                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendas.peek().getPreco();
                             vendas.peek().setQuantidade(carrier - quantidadeAux);
-                            compras.peek().setQuantidade(quantidadeAux - carrier);
-                            aux = compras.poll();
+                            comprasPreco.peek().setQuantidade(quantidadeAux - carrier);
+                            comprasPreco.pool();
                             negocio++;
                         } else if (quantidadeAux == carrier) {
-                            lucroTotal += quantidadeAux * compras.peek().getPreco() - carrier * vendas.peek().getPreco();
-                            aux = vendas.poll(); 
-                            aux = compras.poll();
+                            lucroTotal += quantidadeAux * comprasPreco.peek().getPreco() - carrier * vendas.peek().getPreco();
+                            vendas.poll(); 
+                            comprasPreco.pool();
                             negocio += 2;
                         }
-                        /* else {
-                            vendas.peek().setQuantidade(quantidadeAux - carrier);
-                            compras.peek().setQuantidade(carrier - quantidadeAux);
-                            vendas.poll();
-                            negocio ++;
-                        } */
                     }
                 } 
                 cont++;   
                 //System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));
             }
             readerScan.close();
-            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + Arrays.toString(compras.getHeap().toArray()) + "\nVendas restantes: " + Arrays.toString(vendas.getHeap().toArray()));
+            System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + comprasPreco.toString()+ "\nVendas restantes: " + vendasQuantidade.toString());
         }catch (FileNotFoundException e) {
             System.out.println(e);
         }
