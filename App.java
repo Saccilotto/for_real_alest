@@ -6,7 +6,7 @@ public class App {
     public static void main (String args[]) {
         final int OPERATIONS = 30;
         String path = System.getProperty("user.dir") + "/instancias/" + OPERATIONS + ".txt";
-
+        
         BinaryHeapPriorityQueue<Tuple> comprasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
         BinaryHeapPriorityQueue<Tuple> vendasPreco = new BinaryHeapPriorityQueue<Tuple>(new TuplePrecoComparator(), OPERATIONS);
         vendasPreco.reverse();
@@ -31,8 +31,7 @@ public class App {
                     data = readerScan.nextLine();
                     element = data.split(" ");
                 }
-                //System.out.println("Read: " + element[0] + element[1] + element[2]);
-                heapElement = new Tuple(element[0].charAt(0) ,cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
+                heapElement = new Tuple(element[0].charAt(0), cont, Integer.parseInt(element[1]), Integer.parseInt(element[2]));  
                 
                 System.out.println("Tuple: " + heapElement.toString());
                 if(heapElement.getLabel() == 'C') {
@@ -42,9 +41,11 @@ public class App {
                 if(heapElement.getLabel() == 'V') {
                     vendasPreco.add(heapElement);
                 } 
-
-                while(!(comprasPreco.length() > 0 || vendasPreco.length() > 0)) {// && !(comprasPreco.peek() == null && vendasPreco.peek() == null)) {
-                    if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
+                
+                while((comprasPreco.length() > 0 || vendasPreco.length() > 0) && !(comprasPreco.peek() == null && vendasPreco.peek() == null)) {
+                    //if(comprasPreco.peek().comparePreco(vendasPreco.peek()) == 1) {
+                    int comparepreco = comprasPreco.peek().comparePreco(vendasPreco.peek());
+                    if(comparepreco == 1) {
                         if(comprasPreco.peek().compareQuantidade(vendasPreco.peek()) == 1) {
                             lucroTotal += vendasPreco.peek().getQuantidade() * comprasPreco.peek().getPreco() - comprasPreco.peek().getQuantidade() * vendasPreco.peek().getPreco();
                             vendasPreco.peek().setQuantidade(comprasPreco.peek().getQuantidade() - vendasPreco.peek().getQuantidade());
@@ -62,7 +63,9 @@ public class App {
                 cont++;   
             }
             readerScan.close();
-
+            System.out.println();
+            System.out.println(comprasPreco.toString() + "\n");
+            System.out.println(vendasPreco.toString());
             System.out.println("\nLucro: " + lucroTotal + "\nAções negociadas: " + negocio  +  "\nCompras restantes: " + comprasPreco.length() + "\nVendas restantes: " + vendasPreco.length());
         }catch (FileNotFoundException e) {
             System.out.println(e);
