@@ -135,12 +135,16 @@ public class BinaryHeapPriorityQueue<K extends Comparable<K>> implements Priorit
         return comparator;
     }
 
+    public Comparator<K> setComparator() {
+        return comparator;
+    }
+
     public ArrayList<K> getArray() {
         return getArray();
     }
 
     public void reverse() {
-       this.comparator = Collections.reverseOrder(getComparator());
+       setComparator(Collections.reverseOrder(getComparator()));
     }
 
 }

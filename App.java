@@ -48,7 +48,7 @@ public class App {
 
                 compras.reverse();
                 negocio = compras.length() + vendas.length();
-                while((compras.length() > 0 && vendas.length() > 0) && (vendas.peek().getPreco() > compras.peek().getPreco()))  {   
+                while((compras.length() > 0 && vendas.length() > 0) && (vendas.peek().getPreco() >= compras.peek().getPreco()))  {   
                     //int aux = vendas.peek().getPreco() - compras.peek().getPreco();
                     //int diffPreco = vendas.peek().getPreco() - compras.peek().getPreco();
                     int diffQuantidade = vendas.peek().getQuantidade() - compras.peek().getQuantidade(); 
@@ -66,21 +66,7 @@ public class App {
                             lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
                             vendas.poll();
                         }
-                    } else {
-                        if(diffQuantidade > 0)  {
-                            compras.peek().setQuantidade(diffQuantidade);
-                            lucroTotal += vendas.peek().getQuantidade() * vendas.peek().getPreco() - compras.peek().getQuantidade() * compras.peek().getPreco();
-                            vendas.poll();
-                        } else if(diffQuantidade == 0) {
-                            lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
-                            vendas.poll(); 
-                            compras.poll();
-                        } else {
-                            vendas.peek().setQuantidade(Math.abs(diffQuantidade));
-                            lucroTotal += vendas.peek().getQuantidade() * compras.peek().getPreco() - compras.peek().getQuantidade() * vendas.peek().getPreco();
-                            vendas.poll();
-                        }
-                    }
+                    } 
                 } 
             }  
                 cont++;   
